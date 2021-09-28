@@ -5,13 +5,10 @@ const qrcode2 = require('qrcode');
 const fs = require('fs')
 const express = require('express');
 const cors = require('cors')
-const bodyParser = require('body-parser')
 
 const app = express();
 app.use(cors())
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-const SESSION_FILE_PATH = __dirname + '/wa-session.json';
+const SESSION_FILE_PATH = './wa-session.json';
 const port = process.env.PORT || 8080
 let sessionCfg;
 if (fs.existsSync(SESSION_FILE_PATH)) {
@@ -86,20 +83,15 @@ AQL Peduli`;
     res.end(`sending message to ${nohp} success`)
 })
 
-app.post('/wa-blast/send-message', cors(), (req, res) => {
-    const donatur = req.body.donatur;
-    var nohp = req.body.nohp;
-    const namakeped = req.body.namakepedulian;
-    const jumlah = req.body.jumlah;
-    const norek = req.body.norek;
-    var arrMsg = []
-    var strtMsg = ""
-    console.log(norek)
-    for(var i=0; i<norek.length; i++){
-    	arrMsg[i] = "Bank " + norek[i].bank + "\n" + norek[i].norek + "\n"
-    }
-    var allRekMsg = ""
-     norek.length > 1 ? allRekMsg = `${arrMsg[0]} \n atau \n\n ${arrMsg[1]} \n` : allRekMsg = `${arrMsg[0]} \n`
+app.listen(port, "0.0.0.0", () => {
+    console.log(`server running on ${port}...`)
+})
+
+
+app.post('/wa-blast/send-meesage/:donatur/:nohp/:namakepedulian', cors(), (req, res) => {
+    const donatur = req.params.donatur
+    var nohp = req.params.nohp
+    const namakeped = req.params.namakepedulian;
     if (nohp.startsWith('0')) {
         nohp = '62' + nohp.substr(1) + "@c.us";
     }
@@ -110,63 +102,13 @@ app.post('/wa-blast/send-message', cors(), (req, res) => {
         nohp = nohp + "@c.us";
     }
     // const text = `Assalamu'alaikum, silahkan berdonasi untuk ${linkshare} melalui https://aqlpeduli.or.id versi 2`;
-    const text = `Assalamu'alaikum ${donatur},\n\n\
-Maa syaa Allah, terima kasih sudah mau berdonasi untuk penggalangan ${namakeped}.\n\nYuk lanjutkan kebaikan ini, dengan selanjutnya melakukan transfer sebesar Rp.${jumlah} ke: \n\n ${allRekMsg}Atas nama: Yayasan Pusat Peradaban Islam\n\n Untuk konfirmasi donasi dan pertanyaan lebih lanjut dapat langsung menghubungi kami di wa.me/6282239193515.\n\n\
-Wassalamu'alaikum,\n\
+    const text = `Halo ${donatur},\n\n\
+Terima kasih sudah mau berdonasi untuk penggalangan ${namakeped}. Anda juga dapat berdonasi untuk program kepedulian lainnya di aqlpeduli.or.i>
+Untuk konfirmasi donasi dan jika ada pertanyaan lebih lanjut dapat langsung menghubungi kami di wa.me/6282239193515.\n\n\
+Salam Hangat,\n\
 AQL Peduli`;
     client.sendMessage(nohp, text);
     res.end(`sending message to ${nohp} success`)
-})
-
-app.post('/wa-blast/send-message-from-admin', cors(), (req, res) => {
-    const donatur = req.body.donatur;
-    const namakeped = req.body.namakepedulian;
-    const jumlah = req.body.jumlah;
-    var nohp = req.body.nohp;
-    var arrMsg = []
-    var strtMsg = ""
-    if (nohp.startsWith('0')) {
-        nohp = '62' + nohp.substr(1) + "@c.us";
-    }
-    else if(nohp.startsWith('+')){
-        nohp = nohp.substring(1) + "@c.us";
-    }
-    else{
-        nohp = nohp + "@c.us";
-    }
-    // const text = `Assalamu'alaikum, silahkan berdonasi untuk ${linkshare} melalui https://aqlpeduli.or.id versi 2`;
-    const text = `Jazaakallahu khair ${donatur},\n\n\
-Alhamdulillah Tabaarakallah, donasi kamu untuk kepedulian ${namakeped} telah kami terima sebesar ${jumlah}.\n\n \
-Terima kasih atas donasi Kepeduliannya. Semoga menjadi amal jariyah dan mendapat keberkahan atas apa yang Anda berikan.\n\n \
-Baarakallahu laka fii ahlika wa maalika\n\n\
-'Semoga Allah memberkahimu dalam keluarga dan hartamu." (HR. Bukhari)\n\n\
-Yuk teruskan rantai kebaikan ini dengan mengajak teman Anda ikut berdonasi melalui aqlpeduli.or.id/kepedulian.\n\n\
-Wassalamu'alaikum,\n\
-AQL Peduli`;
-    client.sendMessage(nohp, text);
-    res.end(`sending message from admin to ${nohp} success`)
-})
-
-
-app.post('/wa-blast/send-message-for-relawan', cors(), (req, res) => {
-    const text = req.body.message;
-    var nohp = req.body.allNohp
-    for(var n=0; n<nohp.length; n++){
-    if (nohp[n].startsWith('0')) {
-        nohp[n] = '62' + nohp[n].substr(1) + "@c.us";
-    }
-    else if(nohp[n].startsWith('+')){
-        nohp[n] = nohp[n].substring(1) + "@c.us";
-    }
-    else{
-        nohp[n] = nohp[n] + "@c.us";
-    }
-    }
-    // const text = `Assalamu'alaikum, silahkan berdonasi untuk ${linkshare} melalui https://aqlpeduli.or.id versi 2`;
-    for(var i=0; i<nohp.length; i++){
-        client.sendMessage(nohp[i], text);
-    }
-    res.end(`sending message for relawan to ${nohp} success`)
 })
 
 app.listen(port, "0.0.0.0", () => {
