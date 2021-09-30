@@ -111,7 +111,7 @@ app.post('/wa-blast/send-message', cors(), (req, res) => {
     }
     // const text = `Assalamu'alaikum, silahkan berdonasi untuk ${linkshare} melalui https://aqlpeduli.or.id versi 2`;
     const text = `Assalamu'alaikum ${donatur},\n\n\
-Maa syaa Allah, terima kasih sudah mau berdonasi untuk penggalangan ${namakeped}.\n\nYuk lanjutkan kebaikan ini, dengan selanjutnya melakukan transfer sebesar Rp.${jumlah} ke: \n\n ${allRekMsg}Atas nama: Yayasan Pusat Peradaban Islam\n\n Untuk konfirmasi donasi dan pertanyaan lebih lanjut dapat langsung menghubungi kami di wa.me/6282239193515.\n\n\
+Maa syaa Allah, terima kasih sudah mau berdonasi untuk penggalangan ${namakeped}.\n\nYuk lanjutkan kebaikan ini, dengan selanjutnya melakukan transfer sebesar Rp.${jumlah} ke: \n\n ${allRekMsg}Atas nama: Yayasan Pusat Peradaban Islam\n\n Untuk konfirmasi donasi dan pertanyaan lebih lanjut dapat langsung menghubungi kami di wa.me/6285693602334.\n\n\
 Wassalamu'alaikum,\n\
 AQL Peduli`;
     client.sendMessage(nohp, text);
