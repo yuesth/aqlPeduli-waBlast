@@ -18,7 +18,7 @@ if (fs.existsSync(SESSION_FILE_PATH)) {
     sessionCfg = require(SESSION_FILE_PATH);
 }
 
-const client = new Client({ puppeteer: { headless: true, executablePath: '/home/aql/aqlPeduli-waBlast/node_modules/puppeteer/.local-chromium/linux-818858/chrome-linux/chrome', args: ['--no-sandbox', '--disable-setuid-sandbox'] }, session: sessionCfg });
+const client = new Client({ puppeteer: { headless: true, executablePath: '/home/aql/aqlPeduli-waBlast/node_modules/puppeteer/.local-chromium/linux-901912/chrome-linux/chrome', args: ['--no-sandbox', '--disable-setuid-sandbox'] }, session: sessionCfg });
 
 client.initialize();
 
@@ -30,7 +30,7 @@ app.get('/wa-blast', (req,res)=>{
 app.get('/wa-blast/getqr', cors(), (req, res) => {
     client.on('qr', async (qr) => {
         var gambar = await qrcode2.toDataURL(qr);
-        var body = "<center><img src='" + gambar + "'></img><br/>Silahkan Scan QR code untuk admin (hanya sekali)<br/>Jika sudah login, silahkan kembali ke <a href='https://admin-donasi.aqlpeduli.or.id/dashboard'>Back to admin</a></center>";
+        var body = "<center><img src='" + gambar + "'></img><br/>Si`lahkan Scan QR code untuk admin (hanya sekali)<br/>Jika sudah login, silahkan kembali ke <a href='https://admin-donasi.aqlpeduli.or.id/dashboard'>Back to admin</a></center>";
         res.write(body);
         res.end();
     });
